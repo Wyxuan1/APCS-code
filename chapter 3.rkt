@@ -13,6 +13,7 @@
          (count-pairs (cdr x))
          1)))
 
+
 ;Show that this procedure is not correct. In particular, draw box-and-pointer diagrams representing list structures made up of exactly three pairs for which Ben's procedure would return 3; return 4; return 7; never return at all.
 ;answer: this doesn't check i there are repeats in the list, it doesn't count DISTINCT pairs.
 (count-pairs (list (cons 3 4) (cons 3 4) (cons 4 5) (cons 5 6)))
@@ -63,7 +64,7 @@
     ; is currently empty or not
     (define (insert-queue! datum)
       (let ((new-node (cons datum '())))
-        (if (empty-queue?) 
+        (if (empty-queue?)
           (set! rear-ptr new-node)
           (begin (set-car! front-ptr new-node)(set-car! rear-ptr new-mode)))))
 
@@ -73,7 +74,7 @@
     ; * more than one element in queue
     (define (delete-queue!)
       (cond ((empty-queue?) (error "Empty queue.  :-("))
-            (else 
+            (else
                     ; store the datum at the head of the queue
                   (let ((return-value (peek)))
                     ; update the front pointer
@@ -81,7 +82,7 @@
                     (set! rear-ptr (cdr rear-ptr))
                     ; If there was only one thing in the queue, then the
                     ; rear-ptr will need to be set to nil
-                    (if (null? front-ptr) 
+                    (if (null? front-ptr)
                       (set! rear-ptr null))
                     ; Now return the element of the queue (or #f)
                     (begin(empty-queue?) (cons front-ptr rear-ptr))))))
@@ -109,7 +110,7 @@
                   (cons (cons key value) (cdr table)))))
   'ok)
 
-        
+
 (define (lookup k t)
   (let ((record (assoc k (cdr t))))
     (cond (record (cdr record))
@@ -134,42 +135,42 @@
         ((equals? (caadr t) k)(set-car! t (caddr t)))
         (else (delete! k (caddr t)))))
 ;Exercise 3.25.  Generalizing one- and two-dimensional tables, show how to implement a table in which values are stored under an arbitrary number of keys and different values may be stored under different numbers of keys. The lookup and insert! procedures should take as input a list of keys used to access the table.
-(define (make-table) 
-   (let ((local-table (list '*table*))) 
-     
-     (define (lookup keys) 
-       (define (iter keys table) 
-         (let ((subtable (assoc (car keys) (cdr table)))) 
-           (if subtable 
-               (cond ((null? (cdr keys)) (cdr subtable)) 
-                     (else 
-                     (iter (cdr keys) subtable))) 
-             false))) 
-       (iter keys local-table)) 
-      
-     (define (gen-new-list keys value) 
-         (if (null? (cdr keys)) 
-             (cons (car keys) value) 
-             (list (car keys) (gen-new-list (cdr keys) value)))) 
-      
-     (define (insert! keys value) 
-       (define (iter keys table) 
-         (let ((subtable (assoc (car keys) (cdr table)))) 
-           (if subtable 
-               (cond ((null? (cdr keys)) 
-                     (set-cdr! subtable value)) 
-                    (else 
-                      (iter (cdr keys) subtable))) 
-               (set-cdr! table (cons (gen-new-list keys value) (cdr table))))) 
-         'ok) 
-       (iter keys local-table)) 
-    
-   (define (dispatch m) 
-     (cond ((eq? m 'lookup) lookup) 
-           ((eq? m 'insert!) insert!) 
-           ((eq? m 'display) (display local-table)) 
-           (else (error "Try again")))) 
-   dispatch)) 
+(define (make-table)
+   (let ((local-table (list '*table*)))
+
+     (define (lookup keys)
+       (define (iter keys table)
+         (let ((subtable (assoc (car keys) (cdr table))))
+           (if subtable
+               (cond ((null? (cdr keys)) (cdr subtable))
+                     (else
+                     (iter (cdr keys) subtable)))
+             false)))
+       (iter keys local-table))
+
+     (define (gen-new-list keys value)
+         (if (null? (cdr keys))
+             (cons (car keys) value)
+             (list (car keys) (gen-new-list (cdr keys) value))))
+
+     (define (insert! keys value)
+       (define (iter keys table)
+         (let ((subtable (assoc (car keys) (cdr table))))
+           (if subtable
+               (cond ((null? (cdr keys))
+                     (set-cdr! subtable value))
+                    (else
+                      (iter (cdr keys) subtable)))
+               (set-cdr! table (cons (gen-new-list keys value) (cdr table)))))
+         'ok)
+       (iter keys local-table))
+
+   (define (dispatch m)
+     (cond ((eq? m 'lookup) lookup)
+           ((eq? m 'insert!) insert!)
+           ((eq? m 'display) (display local-table))
+           (else (error "Try again"))))
+   dispatch))
 
 
 
